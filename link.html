@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Guardar Enlaces</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    input, button {
+      padding: 8px;
+      margin: 5px;
+    }
+    ul {
+      margin-top: 20px;
+    }
+    li {
+      margin: 5px 0;
+    }
+    a {
+      text-decoration: none;
+      color: #0066cc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Guardar Links con Nombre</h1>
+
+  <input type="text" id="nombre" placeholder="Nombre del enlace">
+  <input type="text" id="url" placeholder="https://ejemplo.com">
+  <button onclick="guardarLink()">Guardar</button>
+
+  <ul id="listaLinks"></ul>
+
+  <script>
+    const lista = document.getElementById("listaLinks");
+
+    function guardarLink() {
+      const nombre = document.getElementById("nombre").value.trim();
+      const url = document.getElementById("url").value.trim();
+
+      if (!nombre || !url) {
+        alert("Por favor, completa ambos campos.");
+        return;
+      }
+
+      const nuevoLink = { nombre, url };
+      let links = JSON.parse(localStorage.getItem("links")) || [];
+      links.push(nuevoLink);
+      localStorage.setItem("links", JSON.stringify(links));
+      mostrarLinks();
+      document.getElementById("nombre").value = "";
+      document.getElementById("url").value = "";
+    }
+
+    function mostrarLinks() {
+      const links = JSON.parse(localStorage.getItem("links")) || [];
+      lista.innerHTML = "";
+      links.forEach(link => {
+        const li = document.createElement("li");
+        li.innerHTML = `<a href="${link.url}" target="_blank">${link.nombre}</a>`;
+        lista.appendChild(li);
+      });
+    }
+
+    // Mostrar al cargar
+    mostrarLinks();
+  </script>
+
+</body>
+</html>
